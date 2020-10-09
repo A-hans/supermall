@@ -38,6 +38,10 @@ export default {
     //每加载一张图片执行一次refresh对scrollerHight进行重新计算，解决不懂拖动的问题
     Refresh(){
       this.scroll&&this.scroll.refresh()
+    },
+    getScrollY(){
+      //判断Y的值，有值的话返回scroll.y，没值的话返回0
+      return this.scroll ? this.scroll.y : 0
     }
   },
   mounted() {

@@ -3,18 +3,24 @@
     <nav-bar class="home-nav">
       <template v-slot:center> 美丽说 </template>
       </nav-bar>
+      <tab-control
+      :titles="['流行', '新款', '精选']"
+      class="tab-control"
+      @tabClick="tabClick"
+      v-show="isTabFixed"
+      ref='tabControl1'/>
     <scroll class="content" ref='Scroll' 
     :probe-type='3' 
     :pullUpLoad='true' 
     @scroll='contentScorll' 
     @pullingUp='loadMore'>
-    <home-swiper :banners="banners" />
+    <home-swiper :banners="banners" @imageLoad='imageLoad'/>
     <recommend-view :recommends="recommends" />
     <feature-view />
     <tab-control
       :titles="['流行', '新款', '精选']"
-      class="tab-control"
-      @tabClick="tabClick"/>
+      @tabClick="tabClick"
+      ref='tabControl2'/>
     <good-list :goodslist="showGoods" />
     </scroll>
     <back-top @click.native='btnBackTop' v-show='isShowBackTop'></back-top>
@@ -47,7 +53,10 @@ export default {
         'sell': { page: 0, list: [] },
       },
       currentTitle: "pop",
-      isShowBackTop:false
+      isShowBackTop:false,
+      isHeight:0,
+      isTabFixed:false,
+      saveY:0
     };
   },
   computed:{
@@ -69,19 +78,27 @@ export default {
           this.currentTitle = "sell";
           break;
       }
+      //使两个tab-control点击时保持一致
+      this.$refs.tabControl1.currentindex=index
+      this.$refs.tabControl2.currentindex=index
     },
       //封装返回顶部方法，可传三个值，x,y,time
      btnBackTop(){
       this.$refs.Scroll.ScrollTo(0,0,500)
     },
-    //是否隐藏返回首页
     contentScorll(postion){
-      this.isShowBackTop=-(postion.y)>1000
+      //是否隐藏返回首页
+      this.isShowBackTop=(-postion.y)>1000
+      //tabcontrol是否吸顶
+      this.isTabFixed=(-postion.y)>this.isHeight
     },
     //加载更多
     loadMore(){
       this.getHomeGoods(this.currentTitle);
       this.$refs.Scroll.FinishPullUp()
+    },
+    imageLoad(){
+      this.isHeight=this.$refs.tabControl2.$el.offsetTop; 
     },
     
     /* 
@@ -114,6 +131,19 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
     
+  },
+  /* 
+  实现返回首页页面仍然停留在上次浏览的状态 
+  */
+  activated(){
+    this.$refs.Scroll.ScrollTo(0,this.saveY,0);
+    //回到home后进行一次刷新
+    this.$refs.Scroll.Refresh()
+  },
+  deactivated(){
+    //获取当前Y的值
+    this.saveY=this.$refs.Scroll.getScrollY()
+    // console.log(this.saveY,);记录下离开时的位置
   },
   mounted(){
      //加载图片刷新进行refresh
@@ -151,14 +181,18 @@ export default {
   right: 0;
   z-index: 9;
 }
-.tab-control {
-  /* 此属性会动态决定absolute和fixed，当到达顶部向下49px时变为固定定位 */
-  /* 使用better-scroll后此属性不在能监听滚动失效 */
+/*此属性会动态决定absolute和fixed，当到达顶部向下49px时变为固定定位 */
+/* 使用better-scroll后此属性不在能监听滚动失效 */
+/* .tab-control {
   position: sticky;
   top: 49px;
   z-index: 9;
+} */
+.tab-control{
+  position: relative;
+  z-index: 9;
 }
-.content{
+.content {
   /* 动态计算 */
   /* height: calc(100% - 98px); */
   position: absolute;
@@ -167,6 +201,7 @@ export default {
   left: 0;
   right: 0;
   overflow: hidden;
-  
 }
+
+
 </style>
