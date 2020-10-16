@@ -30,7 +30,7 @@ data(){
 methods:{
  
  imageLoad(){
-   //只需要监听一次请求就可以难道萝卜图高度，注意和防抖函数的区别
+   //只需要监听一次请求就可以难道轮播图高度，注意和防抖函数的区别
     if(!this.isLoad){
         this.$emit('imageLoad');
           this.isLoad=true

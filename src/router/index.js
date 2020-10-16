@@ -6,6 +6,7 @@ const Home = () => import('views/home/Home')
 const Category = () => import('views/category/Category')
 const Cart = () => import('views/cart/Cart')
 const Profile = () => import('views/profile/Profile')
+const Detail = () => import('views/detail/Detail')
 
 //解决路由重复问题
 const originalPush = VueRouter.prototype.push
@@ -44,7 +45,15 @@ const routes = [
     meta:{
       title:'我的'
     }
-  }]
+  },
+  {
+    path:'/detail/:iid',
+    component: Detail,
+    meta:{
+      title:'详情'
+    }
+  }
+]
 
 const router = new VueRouter({
   routes,

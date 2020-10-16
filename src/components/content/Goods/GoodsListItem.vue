@@ -1,6 +1,6 @@
 <template>
   <div class="good-list-item">
-    <img :src="goodsitem.show.img" alt="" @load='imgLoad' />
+    <img :src="showImg" alt="" @load='imgLoad' @click='itemClick' />
     <div class="goods-info">
       <p>{{ goodsitem.title }}</p>
       <span class="price">{{ goodsitem.price }}</span>
@@ -20,17 +20,32 @@ export default {
       },
     },
   },
+  computed:{
+    showImg(){
+      /* 
+      逻辑或表达式可以判断第一个变量是否为空，show.img由home组件请求数据，在进入
+      detail组件前已经存在，当进入detail组件后网络请求返回image，根据或表达式第一个式子有值将会做回返回值
+      所以在这里判断时不可以反这些
+       */ 
+      return this.goodsitem.image || this.goodsitem.show.img
+      // return this.goodsitem.show.img || this.goodsitem.image (X)
+    }
+  },
   methods:{
     //每次图片刷新执行一侧refresh，但是现在listitem与scroll之间没有联系，使用事件总线来解决这一问题
     imgLoad(){
       //此处$bus还未定义，我们可以在vue原型中给它赋予vue实例，对此建立组件之间的联系
       this.$bus.$emit('imgLoadItem')
+    },
+    itemClick(){
+          this.$router.push('/detail/'+this.goodsitem.iid)  
     }
-  }
+  },
 };
 </script>
 
-<style>
+<style scoped>
+
 .good-list-item {
   padding-bottom: 40px;
   padding-top: 20px;

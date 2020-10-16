@@ -9,7 +9,8 @@
       @tabClick="tabClick"
       v-show="isTabFixed"
       ref='tabControl1'/>
-    <scroll class="content" ref='Scroll' 
+    <scroll class="content" 
+     ref='Scroll' 
     :probe-type='3' 
     :pullUpLoad='true' 
     @scroll='contentScorll' 
