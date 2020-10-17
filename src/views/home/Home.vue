@@ -31,7 +31,6 @@
 <script>
 import NavBar from "components/common/navbar/NavBar";
 import scroll from "components/common/scroll/Scroll";
-import backTop from "components/common/scroll/backTop"
 
 import TabControl from "components/content/Tabcontrol/TabControl";
 import GoodList from "components/content/Goods/GoodsList";
@@ -42,7 +41,7 @@ import FeatureView from "views/home/ChildComps/FeatureView";
 
 import { getHomeMultiData, getHomeGoods } from "network/home";
 
-import {itemListenerMixin} from "common/mixins"
+import {itemListenerMixin, backTopMixin} from "common/mixins"
 export default {
   name: "Home",
   data() {
@@ -55,7 +54,6 @@ export default {
         'sell': { page: 0, list: [] },
       },
       currentTitle: "pop",
-      isShowBackTop:false,
       isHeight:0,
       isTabFixed:false,
       saveY:0,
@@ -84,13 +82,9 @@ export default {
       this.$refs.tabControl1.currentindex=index
       this.$refs.tabControl2.currentindex=index
     },
-      //封装返回顶部方法，可传三个值，x,y,time
-     btnBackTop(){
-      this.$refs.Scroll.ScrollTo(0,0,500)
-    },
     contentScorll(postion){
-      //是否隐藏返回首页
-      this.isShowBackTop=(-postion.y)>1000
+      //是否隐藏返回首页,在混入中
+      this.listenerBackTop(postion)
       //tabcontrol是否吸顶
       this.isTabFixed=(-postion.y)>this.isHeight
     },
@@ -126,7 +120,7 @@ export default {
    
   },
   //使用混入(mixin)
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin,backTopMixin],
   created() {
     //请求首页数据
     this.getHomeMultiData();
@@ -159,7 +153,6 @@ export default {
   components: {
     NavBar,
     scroll,
-    backTop,
     TabControl,
     GoodList,
     HomeSwiper,

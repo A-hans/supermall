@@ -13,11 +13,13 @@
       <detail-comment-info ref='comments' :commentInfo='commentInfo'/>
       <goods-list ref='recommends' :goodslist='recommendInfo'/>
     </scroll>
+     <back-top @click.native='btnBackTop' v-show='isShowBackTop'></back-top>
+    <detail-bottom-bar /> 
   </div>
 </template>
 
 <script>
-import {itemListenerMixin} from 'common/mixins'
+import {itemListenerMixin,backTopMixin} from 'common/mixins'
 import {debounce} from 'common/utils'
 //子组件
 import detailNavBar from "views/detail/childComps/detailNavBar";
@@ -26,7 +28,8 @@ import detailBaseInfo from "views/detail/childComps/detailBaseInfo";
 import detailShopInfo from "views/detail/childComps/detailShopInfo";
 import detailGoodsInfo from "views/detail/childComps/detailGoodsInfo";
 import detailGoodsParams from "views/detail/childComps/detailGoodsParams";
-import detailCommentInfo from "views/detail/childComps/detailCommentInfo"
+import detailCommentInfo from "views/detail/childComps/detailCommentInfo";
+import detailBottomBar from "views/detail/childComps/detailBottomBar";
 import scroll from "components/common/scroll/Scroll";
 import goodsList from "components/content/Goods/GoodsList"
 //网络请求
@@ -45,7 +48,7 @@ export default {
       recommendInfo:[],
       detailTopY:[],
       getDetailTopY:null,
-      currentIndex:0
+      currentIndex:0,
     };
   },
   methods: {
@@ -63,6 +66,8 @@ export default {
     },
     //监听滚动
     contentScorll(postion){
+       //在混入中做返回顶部按钮隐藏
+      this.listenerBackTop(postion)
       const length=this.detailTopY.length;
         //1.遍历detailTopY的值，通过滚动拿到postion的值在detailTopY区间内进行比对
         //2.为防止i+1大于数组长度拿不到值，需做两次判断，idnex=0，1，2时，index-3时
@@ -70,14 +75,20 @@ export default {
         //4.注意for in拿到的i是字符串，需要进行number类型的转换
         //5.普通的for循环i不需要转换为Number
         //i的值0，1，2，3
-        for(let i=0;i<length;i++){
+        /* for(let i=0;i<length;i++){
           if(this.currentIndex!==i&&i<length&&-postion.y>=this.detailTopY[i]&&-postion.y<this.detailTopY[i+1]||
             this.currentIndex!==i&&i===length-1&&-postion.y>=this.detailTopY[i]){   
                this.currentIndex=i
                this.$refs.detailNav.currentIndex=this.currentIndex
              }  
+          } */
+        //法二，通过在数组中添加一个最大值,简化判断流程
+        for(let i=0;i<length-1;i++){
+          if(this.currentIndex!==i&&-postion.y>=this.detailTopY[i]&&-postion.y<this.detailTopY[i+1]){
+            this.currentIndex=i
+            this.$refs.detailNav.currentIndex=this.currentIndex
           }
-
+        }
     },
       /* 
       推荐页数据请求 
@@ -122,8 +133,10 @@ export default {
         this.detailTopY.push(0);
         this.detailTopY.push(this.$refs.params.$el.offsetTop-49)
         this.detailTopY.push(this.$refs.comments.$el.offsetTop-49)
-        this.detailTopY.push(this.$refs.recommends.$el.offsetTop-49) 
+        this.detailTopY.push(this.$refs.recommends.$el.offsetTop-49)
+        this.detailTopY.push(Number.MAX_VALUE)
         },300)
+        
         //dom渲染完成后回调
         //与在update中一样，dom渲染完成，数据未加载完成拿到的高度依旧不对
         /* 
@@ -147,6 +160,7 @@ export default {
     detailGoodsInfo,
     detailGoodsParams,
     detailCommentInfo,
+    detailBottomBar ,
     scroll,
     goodsList
   },
@@ -173,7 +187,7 @@ export default {
     console.log(this.detailTopY); 
     */
   },
- mixins:[itemListenerMixin]
+ mixins:[itemListenerMixin,backTopMixin]
 };
 
 </script>
@@ -187,7 +201,7 @@ export default {
 }
 
 .content {
-  height: calc(100% - 49px);
+  height: calc(100% - 98px);
   overflow: hidden;
 }
 </style>

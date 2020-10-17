@@ -3,7 +3,7 @@
     <ul v-for="item in recommends" :key='item.idnex'>
       <li class='recommend-item'>
        <a :href="item.link">
-         <img :src="item.image" alt="">
+         <img :src="item.image" alt="" >
         <p>{{item.title}}</p>
        </a>
       </li>
