@@ -36,10 +36,12 @@ export default {
   },
   methods:{
     imgLoad(){
-      //只做一次发送判断
-      if(++this.counter===this.imagesLength){
+      //方法一：只做一次发送判断
+     /*  if(++this.counter===this.imagesLength){
         this.$emit('imgLoad')
-      }  
+      }   */
+    //方法二：发送出去，做防抖
+    this.$emit('imgLoad');
     }
   },
   watch:{

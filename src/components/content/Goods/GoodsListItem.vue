@@ -35,10 +35,28 @@ export default {
     //每次图片刷新执行一侧refresh，但是现在listitem与scroll之间没有联系，使用事件总线来解决这一问题
     imgLoad(){
       //此处$bus还未定义，我们可以在vue原型中给它赋予vue实例，对此建立组件之间的联系
-      this.$bus.$emit('imgLoadItem')
+      /* 
+      1.通过路由判断进行操作
+        为了防止进入detail后重新发送请求给home在此做一层判断，使请求相互独立
+      */
+    if(this.$route.path.indexOf('/home')!==-1){
+       this.$bus.$emit('homeimgLoadItem')
+     }else if(this.$route.path.indexOf('/detail')!==-1){
+        this.$bus.$emit('detailimgLoadItem')
+     }
+     /* 
+     2.通过取消全局事件监听,涉及混入抽取所有事件(貌似不行)
+     */
+    // this.$bus.$emit('imgLoadItem')
+      
     },
     itemClick(){
-          this.$router.push('/detail/'+this.goodsitem.iid)  
+     if(this.$route.path.indexOf('/home')!==-1){
+        this.$router.push('/detail/'+this.goodsitem.iid) 
+     }
+        
+      
+          
     }
   },
 };

@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     //返回指定位置,对scroll做一层判断，防止网络请求不稳定而拿不到scroll对象报错
-    ScrollTo(x, y, time = 300) {
+    ScrollTo(x, y, time ) {
       this.scroll&&this.scroll.scrollTo(x, y, time);
     },
     //是否可以多次加载

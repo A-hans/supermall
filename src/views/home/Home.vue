@@ -41,7 +41,8 @@ import RecommendView from "views/home/ChildComps/RecommendView";
 import FeatureView from "views/home/ChildComps/FeatureView";
 
 import { getHomeMultiData, getHomeGoods } from "network/home";
-import {debounce} from "common/utils"
+
+import {itemListenerMixin} from "common/mixins"
 export default {
   name: "Home",
   data() {
@@ -57,7 +58,7 @@ export default {
       isShowBackTop:false,
       isHeight:0,
       isTabFixed:false,
-      saveY:0
+      saveY:0,
     };
   },
   computed:{
@@ -124,6 +125,8 @@ export default {
     },
    
   },
+  //使用混入(mixin)
+  mixins:[itemListenerMixin],
   created() {
     //请求首页数据
     this.getHomeMultiData();
@@ -131,7 +134,6 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
-    
   },
   /* 
   实现返回首页页面仍然停留在上次浏览的状态 
@@ -144,15 +146,15 @@ export default {
   deactivated(){
     //获取当前Y的值
     this.saveY=this.$refs.Scroll.getScrollY()
-    // console.log(this.saveY,);记录下离开时的位置
   },
   mounted(){
-     //加载图片刷新进行refresh
-     const refresh=debounce(this.$refs.Scroll&&this.$refs.Scroll.Refresh,500)
-    //保证scroll对象拥有了在执行refresh，没创建此对象就调用会报错
-     this.$bus.$on('imgLoadItem',()=>{
-      refresh()
-    })
+    //使用混入接管
+    //  //加载图片刷新进行refresh
+    //  const refresh=debounce(this.$refs.Scroll&&this.$refs.Scroll.Refresh,500)
+    // //保证scroll对象拥有了在执行refresh，没创建此对象就调用会报错
+    //  this.$bus.$on('homeimgLoadItem',()=>{
+    //   refresh()
+    // })
   },
   components: {
     NavBar,
