@@ -14,7 +14,7 @@
       <goods-list ref='recommends' :goodslist='recommendInfo'/>
     </scroll>
      <back-top @click.native='btnBackTop' v-show='isShowBackTop'></back-top>
-    <detail-bottom-bar /> 
+    <detail-bottom-bar @addCart='addCart'/> 
   </div>
 </template>
 
@@ -63,6 +63,20 @@ export default {
     tabClick(index){
       //点击跳转对应位置(通过索引匹配数组的值进行跳转)
       this.$refs.Scroll.ScrollTo(0,-this.detailTopY[index],200);
+    },
+    //将数据传入购物车
+    addCart(){
+      //创建对象存放购物车中需要的信息
+      const product={
+        image:this.topImages[0],
+        title:this.goods.title,
+        desc:this.goods.desc,
+        price:this.goods.realPrice,
+        iid:this.iid
+      };
+      console.log(product);
+      //将数据传递至VueX
+      this.$store.dispatch('addCart',product)
     },
     //监听滚动
     contentScorll(postion){
@@ -201,7 +215,7 @@ export default {
 }
 
 .content {
-  height: calc(100% - 98px);
+  height: calc(100% - 101px);
   overflow: hidden;
 }
 </style>
