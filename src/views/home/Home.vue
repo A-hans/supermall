@@ -1,7 +1,9 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav">
-      <template v-slot:center> 美丽说 </template>
+      <template v-slot:center> 
+       <div>美丽说</div>
+        </template>
       </nav-bar>
       <tab-control
       :titles="['流行', '新款', '精选']"

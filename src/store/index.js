@@ -3,6 +3,7 @@ import VueX from 'vuex';
 
 import mutations from './mutaitions'
 import actions from './actions'
+import getters from './getters'
 
 Vue.use(VueX);
 
@@ -13,6 +14,7 @@ const state={
 const Store =new VueX.Store({
   state,
   actions,
+  getters,
   mutations
 })
 
