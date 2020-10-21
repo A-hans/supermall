@@ -14,13 +14,14 @@
       <goods-list ref='recommends' :goodslist='recommendInfo'/>
     </scroll>
      <back-top @click.native='btnBackTop' v-show='isShowBackTop'></back-top>
-    <detail-bottom-bar @addCart='addCart'/> 
+    <detail-bottom-bar @addCart='addToCart'/>
   </div>
 </template>
 
 <script>
 import {itemListenerMixin,backTopMixin} from 'common/mixins'
 import {debounce} from 'common/utils'
+import {mapActions} from 'vuex'
 //子组件
 import detailNavBar from "views/detail/childComps/detailNavBar";
 import detailSwiper from "views/detail/childComps/detailSwiper";
@@ -30,8 +31,10 @@ import detailGoodsInfo from "views/detail/childComps/detailGoodsInfo";
 import detailGoodsParams from "views/detail/childComps/detailGoodsParams";
 import detailCommentInfo from "views/detail/childComps/detailCommentInfo";
 import detailBottomBar from "views/detail/childComps/detailBottomBar";
+
 import scroll from "components/common/scroll/Scroll";
 import goodsList from "components/content/Goods/GoodsList"
+
 //网络请求
 import { getDetail,getRecommend, Goods, Shop, GoodsParams } from "network/detail";
 export default {
@@ -49,9 +52,11 @@ export default {
       detailTopY:[],
       getDetailTopY:null,
       currentIndex:0,
+    
     };
   },
   methods: {
+    ...mapActions(['addCart']),
     imgLoad(){
       // this.$refs.Scroll&&this.$refs.Scroll.Refresh();
       //在混入中调用refresh
@@ -65,7 +70,7 @@ export default {
       this.$refs.Scroll.ScrollTo(0,-this.detailTopY[index],200);
     },
     //将数据传入购物车
-    addCart(){
+    addToCart(){
       //创建对象存放购物车中需要的信息
       const product={
         image:this.topImages[0],
@@ -74,9 +79,14 @@ export default {
         price:this.goods.realPrice,
         iid:this.iid
       };
-      console.log(product);
       //将数据传递至VueX
-      this.$store.dispatch('addCart',product)
+     /*  this.$store.dispatch('addCart',product).then(res=>{
+        console.log(res);
+      }) */
+      //使用辅助函数
+      this.addCart(product).then(res=>{
+        this.$toast.show(res,2000)
+      })
     },
     //监听滚动
     contentScorll(postion){
@@ -176,7 +186,8 @@ export default {
     detailCommentInfo,
     detailBottomBar ,
     scroll,
-    goodsList
+    goodsList,
+  
   },
   created() {
     //接收路由传来的数据

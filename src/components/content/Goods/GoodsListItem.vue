@@ -54,7 +54,6 @@ export default {
      if(this.$route.path.indexOf('/home')!==-1){
         this.$router.push('/detail/'+this.goodsitem.iid) 
      }
-        
       
           
     }

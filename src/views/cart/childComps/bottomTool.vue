@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-tool">
     <div class='bottom-checked'>
-      <span class="checked-all" :class='{active:isSelectAll}' >
+      <span class="checked-all" :class='{active:isSelectAll}' @click='selectAll'>
         <img src="~assets/img/cart/tick.svg" alt="" />
       </span>
       <span>全选</span>
@@ -18,6 +18,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import {delete_checked,select_all} from 'store/mutations-type'
 export default {
   name: "bottom-tool",
   computed:{
@@ -56,9 +57,12 @@ export default {
   },
   methods:{
      delete_checked(){
-      this.$store.commit('deleteChecked')
-      //通过事件总线更改checkButton中的checked
-      this.$bus.$emit('changeChecked')
+      this.$store.commit(delete_checked)
+   
+    },
+    selectAll(){
+      //全选时为true
+     this.$store.commit(select_all,this.isSelectAll);
     }
   }
 };

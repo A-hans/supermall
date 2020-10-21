@@ -1,5 +1,5 @@
 <template>
-  <div class='check-button' :class='{check:checked}' @click='checkItem'>
+  <div class='check-button' :class='{check:isChecked}' @click='checkItem'>
     <img src="~assets/img/cart/tick.svg" alt="">
   </div>
 </template>
@@ -18,27 +18,15 @@ props:{
     default:0
   }
 },
-data(){
-  return {
-    checked:this.isChecked
-  }
-},
 methods:{
 checkItem(){
-  this.checked=!this.checked
   this.$store.commit({
     type:checked,
-    check:this.checked,
+    check:this.isChecked,
     index:this.index
   })
 }
 },
-mounted(){
-  this.$bus.$on('changeChecked',()=>{
-    //此处修改的为cartList的数据， isChecked由iteminfo提供，所以数据没有更新
-  this.checked=false;
-  })
-}
 }
 </script>
 
