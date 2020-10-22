@@ -92,6 +92,7 @@ export default {
     contentScorll(postion){
        //在混入中做返回顶部按钮隐藏
       this.listenerBackTop(postion)
+      
       const length=this.detailTopY.length;
         //1.遍历detailTopY的值，通过滚动拿到postion的值在detailTopY区间内进行比对
         //2.为防止i+1大于数组长度拿不到值，需做两次判断，idnex=0，1，2时，index-3时

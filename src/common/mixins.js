@@ -18,8 +18,7 @@ export const itemListenerMixin = {
       this.$bus.$on('detailimgLoadItem', () => {
         this.refresh()
       })
-    }
-
+    } 
   }
 }
 
@@ -33,12 +32,11 @@ export const backTopMixin = {
     btnBackTop() {
       this.$refs.Scroll.ScrollTo(0, 0, 500)
     },
-    listenerBackTop(postion) {
-      this.isShowBackTop = (-postion.y) > 1000
+    listenerBackTop(postion, y = 1000) {
+      this.isShowBackTop = (-postion.y) > y
     }
   },
   components: {
     backTop
   }
 }
-
