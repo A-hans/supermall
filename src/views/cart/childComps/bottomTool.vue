@@ -10,7 +10,7 @@
     <div class='price'>
       合计：￥{{totalPrice}}
     </div>
-    <div class='buy'>
+    <div class='buy' @click='calcClick'>
       结算({{chekedNum}})
     </div>
   </div>
@@ -53,16 +53,22 @@ export default {
       }
           return true
     */
-    } 
+    }
   },
   methods:{
      delete_checked(){
       this.$store.commit(delete_checked)
+      this.$emit('showText')
    
     },
     selectAll(){
       //全选时为true
      this.$store.commit(select_all,this.isSelectAll);
+    },
+    calcClick(){
+      if(this.cartList.length===0){
+        this.$toast.show('没有商品哦')
+      }else { this.$toast.show('还在开发中哦~')}
     }
   }
 };

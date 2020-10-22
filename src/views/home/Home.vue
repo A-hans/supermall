@@ -111,12 +111,12 @@ export default {
       });
     },
     getHomeGoods(type) {
-      const page = this.goods[type].page + 1;
+      const page = this.goods[type].page + 1;//此处为发生网络请求的page+1
       getHomeGoods(type, page).then((res) => {
         //将请求回来的一组数据保存至对应类型的list中
         this.goods[type].list.push(...res.data.list);
         //每次请求完后，page+1，进行下一次的数据请求
-        this.goods[type].page + 1;
+        this.goods[type].page + 1;//此处是数组内page+1
       });
     },
    
