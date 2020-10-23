@@ -2,7 +2,7 @@
   <div id="category">
     <nav-bar class="category-nav">
       <template v-slot:center>
-        <div>商品分类</div>
+        <h3>商品分类</h3>
       </template>
     </nav-bar>
     <div class="category-content">

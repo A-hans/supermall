@@ -7,7 +7,7 @@
     <!-- 导航 -->
     <nav-bar class="cart-nav">
       <template v-slot:center>
-        <div>购物车({{ length }})</div>
+        <h3>购物车({{ length }})</h3>
       </template>
     </nav-bar>
     <!-- 内容 -->

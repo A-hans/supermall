@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav">
       <template v-slot:center> 
-       <div>美丽说</div>
+        <h3>美丽说</h3> 
         </template>
       </nav-bar>
       <tab-control
